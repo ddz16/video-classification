@@ -1,0 +1,24 @@
+{
+    "REC_06-20220910091842.mp4": {
+        "fps": 30,
+        "duration": 3601,
+        "annotation": [
+            {
+                "label": "walk",
+                "segment": [0, 1140]
+            },
+            {
+                "label": "observe",
+                "segment": [1140, 2820]
+            },
+            {
+                "label": "ascend",
+                "segment": [2820, 3240]
+            },
+            {
+                "label": "walk",
+                "segment": [3240, 3601]
+            }
+        ]
+    }
+}

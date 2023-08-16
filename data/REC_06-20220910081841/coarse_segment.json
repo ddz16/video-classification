@@ -1,0 +1,20 @@
+{
+    "REC_06-20220910081841.mp4": {
+        "fps": 30,
+        "duration": 3601,
+        "annotation": [
+            {
+                "label": "other",
+                "segment": [0, 960]
+            },
+            {
+                "label": "off",
+                "segment": [960, 2775]
+            },
+            {
+                "label": "dive",
+                "segment": [2775, 3601]
+            }
+        ]
+    }
+}

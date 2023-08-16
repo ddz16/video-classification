@@ -1,0 +1,19 @@
+# 忽略视频文件
+*.mp4
+*.mov
+*.avi
+
+# 忽略图像文件
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# 忽略.ipynb文件
+*.ipynb
+
+# 忽略文件夹下的所有文件
+generate_result_video/*
+deprecated/*
+__pycache__/
+

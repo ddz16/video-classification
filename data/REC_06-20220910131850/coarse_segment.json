@@ -1,0 +1,44 @@
+{
+    "REC_06-20220910131850.mp4": {
+        "fps": 30,
+        "duration": 3601,
+        "annotation": [
+            {
+                "label": "work",
+                "segment": [0, 123]
+            },
+            {
+                "label": "observe",
+                "segment": [123, 480]
+            },
+            {
+                "label": "walk",
+                "segment": [480, 2100]
+            },
+            {
+                "label": "observe",
+                "segment": [2100, 2235]
+            },
+            {
+                "label": "work",
+                "segment": [2235, 2550]
+            },
+            {
+                "label": "walk",
+                "segment": [2550, 3075]
+            },
+            {
+                "label": "observe",
+                "segment": [3075, 3140]
+            },
+            {
+                "label": "work",
+                "segment": [3140, 3450]
+            },
+            {
+                "label": "walk",
+                "segment": [3450, 3601]
+            }
+        ]
+    }
+}
