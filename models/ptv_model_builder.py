@@ -22,7 +22,7 @@ from pytorchvideo.models.slowfast import create_slowfast
 from fvcore.common.config import CfgNode
 
 
-from batchnorm_helper import get_norm
+from models.batchnorm_helper import get_norm
 
 
 
@@ -443,10 +443,6 @@ class PTVSlowFast(nn.Module):
         """
         super(PTVSlowFast, self).__init__()
 
-        self.NUM_BLOCK_TEMP_KERNEL = [[each[0], each[0]] for each in cfg.RESNET.NUM_BLOCK_TEMP_KERNEL]
-        self.SPATIAL_STRIDES = [[each[0], each[0]] for each in cfg.RESNET.SPATIAL_STRIDES]
-        self.SPATIAL_DILATIONS = [[each[0], each[0]] for each in cfg.RESNET.SPATIAL_DILATIONS]
-
         self.ALPHA = cfg.SLOWFAST.ALPHA
         self._construct_network(cfg)
 
@@ -465,10 +461,10 @@ class PTVSlowFast(nn.Module):
         pool_size = _POOL1[cfg.MODEL.ARCH]
         num_groups = cfg.RESNET.NUM_GROUPS
         width_per_group = cfg.RESNET.WIDTH_PER_GROUP
-        spatial_dilations = self.SPATIAL_DILATIONS
-        spatial_strides = self.SPATIAL_STRIDES
+        spatial_dilations = cfg.RESNET.SPATIAL_DILATIONS
+        spatial_strides = cfg.RESNET.SPATIAL_STRIDES
         temp_kernel = _TEMPORAL_KERNEL_BASIS[cfg.MODEL.ARCH]
-        num_block_temp_kernel = self.NUM_BLOCK_TEMP_KERNEL
+        num_block_temp_kernel = cfg.RESNET.NUM_BLOCK_TEMP_KERNEL
         stage_depth = _MODEL_STAGE_DEPTH[cfg.RESNET.DEPTH]
 
         stage_conv_a_kernel_sizes = [[], []]

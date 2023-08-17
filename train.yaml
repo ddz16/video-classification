@@ -1,0 +1,45 @@
+protocolVersion: 2
+name: train_videocls
+type: job
+prerequisites:
+  - type: dockerimage
+    uri: 'ddz16/videocls:1.0'
+    name: videocls
+taskRoles:
+  taskrole:
+    instances: 1
+    completion:
+      minFailedInstances: 1
+    taskRetryCount: 0
+    dockerImage: videocls
+    resourcePerInstance:
+      gpu: 4
+      cpu: 8
+      memoryMB: 90000
+    commands:
+      - cd /mnt/nfs-storage/ddz/video-classification
+      - conda activate videocls
+      - pip list
+      - >-
+        python main1.py --cfg configs/I3D.yaml --opts TRAIN.BATCH_SIZE 64
+defaults:
+  virtualCluster: 4cardv100
+extras:
+  com.microsoft.pai.runtimeplugin:
+    - plugin: ssh
+      parameters:
+        jobssh: true
+        userssh:
+          type: custom
+          value: >-
+            ssh-rsa
+            AAAAB3NzaC1yc2EAAAADAQABAAABgQCV8aKWWu9GYfL+ihPfaLc6r2LiOjjKOa7jZYGwgI27vdUQvL+5yKvhyFNh15qx5qUz0N5AcbOyFypGUwrLVC7y2/hwdo6wZLNBUbZawadbNyebPOH5/16kQG8q3f92vxeYNHV2WMmskpHeSy7L6z3cysPZz8qaljtfMNRsgFDGC7wbEqje9Qzlj8D7Dgd1ror/8nVX2IG6s/pNyg6yK3+HlVo2N+jf0z1T9THkxhWzPOtfIiOgPg6hqXPsHg+R0rOf0FR+jSZrw+bnsKl38QDFQs8r7dUTPVSmY9oLafEFP1wd8QeBdCiKk+hYZki79rPMvV4tZtl27vH02EqOO2nB2kL5/UiL/btc5GNyKoobIGJQHjKboWt7DZnhgts0UdjyJ9/DCp3Lsp+peA1y8D3cpSuUdJaugQULT3A7YbotMcqxTltEiik+2NngC+amh6tzvF/qvonjbvkF9b2UhK6rs121BAqB566MkR2i64/lqKjtMv8wGBbMJ2DYSQNN67s= ddz@ddz
+    - plugin: teamwise_storage
+      parameters:
+        storageConfigNames:
+          - nfs-storage
+  hivedScheduler:
+    taskRoles:
+      taskrole:
+        skuNum: 1
+        skuType: 4cardv100

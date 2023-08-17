@@ -5,7 +5,7 @@ import os
 from utils import AverageMeter, calculate_accuracy
 
 
-def train(model, criterion, optimizer, train_loader, test_loader, num_epochs, device, opt):
+def train(model, criterion, optimizer, train_loader, test_loader, num_epochs, device, cfg):
 
     model.train()
 
@@ -36,8 +36,10 @@ def train(model, criterion, optimizer, train_loader, test_loader, num_epochs, de
                     'Acc {acc.val:.3f} ({acc.avg:.3f})'.format(epoch, i + 1, len(train_loader), loss=losses, acc=accuracies))
 
 
-        if epoch % 10 == 0:
-            save_file_path = os.path.join(opt.checkpoint_path, 'save_{}.pth'.format(epoch))
+        if epoch % 5 == 0:
+            if not os.path.exists(cfg.TRAIN.CHECKPOINT_PATH):
+                os.mkdir(cfg.TRAIN.CHECKPOINT_PATH)
+            save_file_path = os.path.join(cfg.TRAIN.CHECKPOINT_PATH, 'save_{}.pth'.format(epoch))
             states = {
                 'epoch': epoch,
                 'state_dict': model.state_dict(),

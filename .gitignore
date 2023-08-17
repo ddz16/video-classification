@@ -15,5 +15,7 @@
 # 忽略文件夹下的所有文件
 generate_result_video/*
 deprecated/*
+data/*
 __pycache__/
+
 

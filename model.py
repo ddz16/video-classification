@@ -132,7 +132,7 @@ def generate_model(opt):
 
 def generate_model_PTV(cfg):
     
-    model_dict:{
+    model_dict = {
         'I3D': PTVResNet,
         'R2plus1D': PTVR2plus1D,
         'X3D': PTVX3D,

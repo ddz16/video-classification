@@ -110,8 +110,8 @@ def load_config(args, config_path=None):
     # SlowFast options
     # -----------------------------------------------------------------------------
     _C.SLOWFAST = CfgNode()
-    _C.SLOWFAST.BETA_INV = 8  # Corresponds to the inverse of the channel reduction ratio, $\beta$ between the Slow and Fast pathways.
     _C.SLOWFAST.ALPHA = 4     # Corresponds to the frame rate reduction ratio, $\alpha$ between the Slow and Fast pathways.
+    _C.SLOWFAST.BETA_INV = 8  # Corresponds to the inverse of the channel reduction ratio, $\beta$ between the Slow and Fast pathways.
     _C.SLOWFAST.FUSION_CONV_CHANNEL_RATIO = 2  # Ratio of channel dimensions between the Slow and Fast pathways.
     _C.SLOWFAST.FUSION_KERNEL_SZ = 5  # Kernel dimension used for fusing information from Fast pathway to Slow pathway.
 
