@@ -107,8 +107,7 @@ def get_video_names_and_annotations(data, subset):
     return video_names, annotations
 
 
-def make_dataset(root_path, downsample_rate, sample_duration, flag="train"):
-    label_dic = {'dive': 0, 'walk': 1, 'observe':2, 'work': 3, 'ascend': 4, 'off': 5, 'other': 6}
+def make_dataset(root_path, label_dict, downsample_rate, sample_duration, flag="train"):
     dataset = []  # 每个元素是一个clip，它由一个字典表示，该字典有三个键，分别是video_path，16个帧的索引frame_indices，类别label
 
     file = open(os.path.join(root_path, flag+".txt"), "r")
@@ -119,7 +118,7 @@ def make_dataset(root_path, downsample_rate, sample_duration, flag="train"):
         video_folder = video_folder.strip()
         _, labels, segments = read_json(os.path.join(root_path, video_folder, "coarse_segment.json"))
         for i in range(len(labels)):
-            label_id = label_dic[labels[i]]
+            label_id = label_dict[labels[i]]
             start_index = segments[i][0] * downsample_rate + 1
             end_index = segments[i][1] * downsample_rate + 1
             for index in range(start_index, (end_index - sample_duration + 1), sample_duration):
@@ -135,16 +134,17 @@ def make_dataset(root_path, downsample_rate, sample_duration, flag="train"):
 class Video(data.Dataset):
     def __init__(
         self,
-        root_path, 
+        root_path,
+        label_dict,
         flag='train', 
         spatial_transform=None, 
         temporal_transform=None, 
         get_loader=get_default_video_loader,
         downsample_rate=2,
-        sample_duration=16
+        sample_duration=16,
         ):
 
-        self.data = make_dataset(root_path, downsample_rate=downsample_rate, sample_duration=sample_duration, flag=flag)
+        self.data = make_dataset(root_path, label_dict=label_dict, downsample_rate=downsample_rate, sample_duration=sample_duration, flag=flag)
 
         self.spatial_transform = spatial_transform
         self.temporal_transform = temporal_transform

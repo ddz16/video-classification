@@ -1,10 +1,11 @@
 import torch
-from spatial_transforms import (Compose, Normalize, Resize, CenterCrop, ToTensor)
+from spatial_transforms import (Compose, Scale, Normalize, Resize, CenterCrop, ToTensor)
 
 from configs.parser import parse_args, load_config
 from dataset import Video
 from model import generate_model_PTV
 from train import train, val, test
+
 
 def main():
     args = parse_args()
@@ -13,23 +14,27 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+    label_dict = {'dive': 0, 'walk': 1, 'observe':2, 'work': 3, 'ascend': 4, 'off': 5, 'other': 6}
+
     spatial_transform = Compose([
-        Resize(cfg.DATA.TRAIN_CROP_SIZE),
+        Scale(cfg.DATA.TRAIN_CROP_SIZE),
         CenterCrop(cfg.DATA.TRAIN_CROP_SIZE),
         ToTensor(),
         Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
 
     train_dataset = Video(
-        root_path=cfg.DATA.DATA_PATH, 
+        root_path=cfg.DATA.DATA_PATH,
+        label_dict=label_dict,
         flag='train',
         spatial_transform=spatial_transform, 
         downsample_rate=cfg.DATA.SAMPLING_RATE,
         sample_duration=cfg.DATA.NUM_FRAMES
         )
     test_dataset = Video(
-        root_path=cfg.DATA.DATA_PATH, 
-        flag='test', 
+        root_path=cfg.DATA.DATA_PATH,
+        label_dict=label_dict,
+        flag='test',
         spatial_transform=spatial_transform,
         downsample_rate=cfg.DATA.SAMPLING_RATE,
         sample_duration=cfg.DATA.NUM_FRAMES
@@ -73,8 +78,10 @@ def main():
             test_loader,
             train_epoch, 
             device, 
-            cfg
+            cfg,
+            label_dict
             )
+
 
 if __name__ == "__main__":
     main()

@@ -60,6 +60,19 @@ def calculate_accuracy(outputs, targets, topk=1):
         return n_correct_elems / batch_size
 
 
+def calculate_class_num(targets, label_dict, flag):
+    res = 'In ' + flag + ' , '
+    class_num = [0]*len(label_dict)
+
+    for each in targets:
+        class_num[each] += 1
+
+    for key, value in label_dict.items():
+        res += key + ': ' + str(class_num[value]) + ' || '
+
+    print(res)
+
+
 def calculate_precision_and_recall(outputs, targets, pos_label=1):
     with torch.no_grad():
         _, pred = outputs.topk(1, 1, largest=True, sorted=True)
