@@ -43,6 +43,8 @@ def load_config(args, config_path=None):
     _C.DATA.INPUT_CHANNEL_NUM = [3]
     _C.DATA.TRAIN_CROP_SIZE = 256
     _C.DATA.TEST_CROP_SIZE = 256
+    _C.DATA.MEAN = [0.485, 0.456, 0.406]
+    _C.DATA.STD = [0.229, 0.224, 0.225]
 
     # -----------------------------------------------------------------------------
     # Model options
@@ -130,19 +132,22 @@ def load_config(args, config_path=None):
     _C.SOLVER = CfgNode()
     _C.SOLVER.OPTIMIZING_METHOD = "adam"  # Optimization method.
     _C.SOLVER.BASE_LR = 0.1  # Base learning rate.
-    _C.SOLVER.LR_POLICY = "cosine"  # Learning rate policy (see utils/lr_policy.py for options and examples).
     _C.SOLVER.COSINE_END_LR = 0.0  # Final learning rates for 'cosine' policy.
     _C.SOLVER.GAMMA = 0.1  # Exponential decay factor.
     _C.SOLVER.STEP_SIZE = 1  # Step size for 'exp' and 'cos' policies (in epochs).
     _C.SOLVER.STEPS = []  # Steps for 'steps_' policies (in epochs).
     _C.SOLVER.LRS = []  # Learning rates for 'steps_' policies.
-    _C.SOLVER.MAX_EPOCH = 300  # Maximal number of epochs.
+    _C.SOLVER.EPOCHS = 300
+    _C.SOLVER.WARMUP = False
+    _C.SOLVER.WARMUP_EPOCHS = 0  # Gradually warm up the SOLVER.BASE_LR over this number of epochs.b
+    _C.SOLVER.SCHEDULE = "cosine"
+    _C.SOLVER.SCHEDULE_STEPS = [10, 20, 30]
+    _C.SOLVER.SCHEDULE_GAMMA = 0.1
     _C.SOLVER.MOMENTUM = 0.9  # Momentum.
     _C.SOLVER.DAMPENING = 0.0  # Momentum dampening.
     _C.SOLVER.NESTEROV = True  # Nesterov momentum.
     _C.SOLVER.WEIGHT_DECAY = 1e-4  # L2 regularization.
     _C.SOLVER.WARMUP_FACTOR = 0.1  # Start the warm up from SOLVER.BASE_LR * SOLVER.WARMUP_FACTOR.
-    _C.SOLVER.WARMUP_EPOCHS = 0.0  # Gradually warm up the SOLVER.BASE_LR over this number of epochs.b
     _C.SOLVER.WARMUP_START_LR = 0.01  # The start learning rate of the warm up.
     _C.SOLVER.BASE_LR_SCALE_NUM_SHARDS = False  # Base learning rate is linearly scaled with NUM_SHARDS.
     _C.SOLVER.COSINE_AFTER_WARMUP = False  # If True, start from the peak cosine learning rate after warm up.

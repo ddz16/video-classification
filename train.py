@@ -6,7 +6,7 @@ from utils import AverageMeter, calculate_accuracy, calculate_class_num
 from plot_results import plot_confusion_matrix, plot_roc_curve
 
 
-def train(model, criterion, optimizer, train_loader, test_loader, num_epochs, device, cfg, label_dict):
+def train(model, criterion, optimizer, scheduler, train_loader, test_loader, num_epochs, device, cfg, label_dict):
 
     model.train()
 
@@ -33,6 +33,7 @@ def train(model, criterion, optimizer, train_loader, test_loader, num_epochs, de
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+            scheduler.step()
             
             if i % 30 == 0:
                 print('Epoch: [{0}][{1}/{2}]\t'
@@ -53,9 +54,11 @@ def train(model, criterion, optimizer, train_loader, test_loader, num_epochs, de
             }
             torch.save(states, save_file_path)
         
+        lr = scheduler.get_last_lr()[0]
         print('Epoch: {0}\t'
-              'Train Loss {1}\t'
-              'Train Acc {2}'.format(epoch, losses.avg, accuracies.avg))
+              'Lr: {1}\t'
+              'Train Loss {2}\t'
+              'Train Acc {3}'.format(epoch, lr, losses.avg, accuracies.avg))
               
         test(model, test_loader, device, label_dict)
 

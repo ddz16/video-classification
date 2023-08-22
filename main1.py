@@ -5,6 +5,9 @@ from configs.parser import parse_args, load_config
 from dataset import Video
 from model import generate_model_PTV
 from train import train, val, test
+from lr_schedulers import make_scheduler
+
+from torch.utils.data.sampler import WeightedRandomSampler
 
 
 def main():
@@ -20,7 +23,7 @@ def main():
         Scale(cfg.DATA.TRAIN_CROP_SIZE),
         CenterCrop(cfg.DATA.TRAIN_CROP_SIZE),
         ToTensor(),
-        Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        Normalize(cfg.DATA.MEAN, cfg.DATA.STD)
     ])
 
     train_dataset = Video(
@@ -39,6 +42,17 @@ def main():
         downsample_rate=cfg.DATA.SAMPLING_RATE,
         sample_duration=cfg.DATA.NUM_FRAMES
         )
+    
+    # sample_class = []
+    # num_classes = [0]*len(label_dict)
+    # for _, each_target in train_dataset:
+    #     num_classes[int(each_target)] += 1
+    #     sample_class.append(int(each_target))
+    # weight = 1. / num_classes.float()
+    # print("class weight:", weight)
+    # samples_weight = torch.tensor([weight[t] for t in sample_class])
+    # print("sample length:", len(samples_weight))
+    # sampler = WeightedRandomSampler(samples_weight, len(samples_weight), replacement=True)
 
     print("train dataset length:", len(train_dataset))
     print("test dataset length:", len(test_dataset))
@@ -47,6 +61,7 @@ def main():
         train_dataset,
         batch_size=cfg.TRAIN.BATCH_SIZE, 
         shuffle=True, 
+        # sampler=sampler,
         num_workers=cfg.TRAIN.NUM_WORKERS, 
         pin_memory=False
     )
@@ -70,10 +85,13 @@ def main():
             lr=cfg.SOLVER.BASE_LR, 
             weight_decay=cfg.SOLVER.WEIGHT_DECAY
             )
+        num_iters_per_epoch = len(train_loader)
+        scheduler = make_scheduler(optimizer, cfg, num_iters_per_epoch, last_epoch=-1)
         train(
             model,
             criterion,
             optimizer,
+            scheduler,
             train_loader,
             test_loader,
             train_epoch, 

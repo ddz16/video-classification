@@ -2,7 +2,9 @@ DATA:
   NUM_FRAMES: 16                      
   SAMPLING_RATE: 2
   INPUT_CHANNEL_NUM: [3]
-
+  MEAN: [0.395, 0.396, 0.397]
+  STD: [0.250, 0.240, 0.200]
+  
 MODEL:
   ARCH: r2plus1d
   MODEL_NAME: R2plus1D
@@ -25,9 +27,14 @@ TRAIN:
   CHECKPOINT_PATH: checkpoints/r2plus1d/
 
 SOLVER:
-  BASE_LR: 0.0001
-  MAX_EPOCH: 30
-  WEIGHT_DECAY: 1e-4
+  BASE_LR: 0.01
+  WARMUP: False
+  WARMUP_EPOCHS: 10
+  EPOCHS: 30
+  SCHEDULE: cosine  # or multistep
+  SCHEDULE_STEPS: [10, 20, 30]
+  SCHEDULE_GAMMA: 0.1
+  WEIGHT_DECAY: 1e-3
   OPTIMIZING_METHOD: adam
 
 OUTPUT: output.json
