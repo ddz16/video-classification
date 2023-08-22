@@ -140,4 +140,12 @@ def generate_model_PTV(cfg):
     }
 
     model = model_dict[cfg.MODEL.MODEL_NAME](cfg)
+
+    if cfg.MODEL.PRETRAIN:
+        ckpt = torch.load(cfg.MODEL.PRETRAIN_FILE)["model_state"]
+        pretrained_dict = {"model."+k: v for k, v in ckpt.items() if "proj" not in k}
+        missing_keys, unexpected_keys = model.load_state_dict(pretrained_dict, strict=False)
+        print("missing_keys:", missing_keys)
+        print("unexpected_keys:", unexpected_keys)
+
     return model

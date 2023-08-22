@@ -7,6 +7,8 @@ DATA:
 
 
 MODEL:
+  PRETRAIN: False
+  PRETRAIN_FILE: pretrain/I3D.pyth
   ARCH: i3d
   MODEL_NAME: I3D
   NUM_CLASSES: 7

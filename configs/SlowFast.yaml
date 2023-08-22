@@ -4,8 +4,10 @@ DATA:
   INPUT_CHANNEL_NUM: [3, 3]
   MEAN: [0.395, 0.396, 0.397]
   STD: [0.250, 0.240, 0.200]
-  
+
 MODEL:
+  PRETRAIN: False
+  PRETRAIN_FILE: pretrain/SLOWFAST.pyth
   ARCH: slowfast
   MODEL_NAME: SlowFast
   NUM_CLASSES: 7

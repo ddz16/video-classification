@@ -50,8 +50,10 @@ def load_config(args, config_path=None):
     # Model options
     # -----------------------------------------------------------------------------
     _C.MODEL = CfgNode()
+    _C.MODEL.PRETRAIN = False
+    _C.MODEL.PRETRAIN_FILE = ""
     _C.MODEL.ARCH = "i3d"
-    _C.MODEL.MODEL_NAME = "I3D" 
+    _C.MODEL.MODEL_NAME = "I3D"
     _C.MODEL.NUM_CLASSES = 7
     _C.MODEL.SINGLE_PATHWAY_ARCH = [           # model architectures that has one single pathway
         "2d",

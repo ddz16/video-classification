@@ -6,6 +6,8 @@ DATA:
   STD: [0.250, 0.240, 0.200]
 
 MODEL:
+  PRETRAIN: False
+  PRETRAIN_FILE: pretrain/X3D_M.pyth
   ARCH: x3d
   MODEL_NAME: X3D
   NUM_CLASSES: 7
