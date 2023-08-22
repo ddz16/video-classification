@@ -78,7 +78,7 @@ def main():
     model = torch.nn.DataParallel(model, device_ids=None)  # 默认用全部的GPU
 
     if cfg.TRAIN.ENABLE:
-        train_epoch = cfg.SOLVER.MAX_EPOCH
+        train_epoch = cfg.SOLVER.EPOCHS + cfg.SOLVER.WARMUP_EPOCHS if cfg.SOLVER.WARMUP else cfg.SOLVER.EPOCHS
         criterion = torch.nn.CrossEntropyLoss()
         optimizer = torch.optim.Adam(
             model.parameters(), 
