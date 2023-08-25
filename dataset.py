@@ -175,10 +175,53 @@ class Video(data.Dataset):
         return len(self.data)
 
 
+class ExtractFeatureVideo(data.Dataset):
+    def __init__(
+        self,
+        frames_path,
+        spatial_transform=None,
+        sample_duration=16,
+        stride=1
+        ):
+        self.frames_path = frames_path
+        self.spatial_transform = spatial_transform
+        self.sample_duration = sample_duration
+        self.stride = stride
+        self.frames = self.load_frames()
+
+    def load_frames(self):
+        frames = []
+        for filename in sorted(os.listdir(self.frames_path)):
+            if filename.endswith('.jpg') or filename.endswith('.png'):
+                frames.append(filename)
+        return frames
+
+    def __getitem__(self, index):
+        start_index = index * self.stride
+        end_index = start_index + self.sample_duration
+        clip_frames = self.frames[start_index:end_index]
+
+        clip = []
+        for frame in clip_frames:
+            img = get_default_image_loader()(os.path.join(self.frames_path, frame))
+            clip.append(img)
+
+        if self.spatial_transform is not None:
+            clip = [self.spatial_transform(img) for img in clip]
+
+        clip = torch.stack(clip, 0).permute(1, 0, 2, 3)
+
+        return clip
+
+    def __len__(self):
+        return (len(self.frames)-self.sample_duration) // self.stride + 1
+
+
+
+
+
 if __name__ == '__main__':
     spatial_transform = []
-
-   
     spatial_transform.append(Resize(224))
     spatial_transform.append(CenterCrop(224))
     # normalize = get_normalize_method(opt.mean, opt.std, opt.no_mean_norm,

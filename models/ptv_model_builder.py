@@ -120,7 +120,7 @@ def get_head_act(act_func):
             "{} is not supported as a head activation "
             "function.".format(act_func)
         )
-    
+
 
 class PTVResNet(nn.Module):
     """
@@ -250,7 +250,7 @@ class PTVResNet(nn.Module):
         if not self.training:
             x = self.post_act(x)
             x = x.mean([2, 3, 4])
-            
+
         x = x.view(x.shape[0], -1)
         return x
 

@@ -70,7 +70,7 @@ def plot_roc_curve(true_label, pred_label, label_dict, save_path='results/'):
     """
     示例用法:
         true_label = [0, 1, 2, 0, 1, 2, 0, 1, 2]
-        pred_label = [0, 1, 0, 0, 1, 1, 2, 2, 2]
+        pred_label : B*C
         label_dict = {'A': 0, 'B': 1, 'C': 2}
         plot_roc_curve(true_label, pred_label, label_dict)
     """
@@ -82,7 +82,7 @@ def plot_roc_curve(true_label, pred_label, label_dict, save_path='results/'):
     for class_label in new_label_dict:
         # 将真实标签和预测标签转换为二进制形式，以便计算ROC曲线
         true_binary = [1 if label == class_label else 0 for label in true_label]
-        pred_binary = [1 if label == class_label else 0 for label in pred_label]
+        pred_binary = pred_label[:, class_label].tolist()
 
         # 计算ROC曲线的假阳率、真阳率和阈值
         fpr, tpr, thresholds = roc_curve(true_binary, pred_binary)

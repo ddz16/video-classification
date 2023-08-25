@@ -106,10 +106,11 @@ def test(model, dataloader, device, label_dict):
             all_outputs_list.append(outputs)
     
     all_targets = torch.cat(all_targets_list, dim=0).tolist()
-    all_outputs = torch.argmax(torch.cat(all_outputs_list, dim=0), dim=1).tolist()
+    all_scores = torch.cat(all_outputs_list, dim=0)
+    all_outputs = torch.argmax(all_scores, dim=1).tolist()
     calculate_class_num(all_targets, label_dict, 'test')
     plot_confusion_matrix(all_targets, all_outputs, label_dict)
-    plot_roc_curve(all_targets, all_outputs, label_dict)
+    plot_roc_curve(all_targets, all_scores, label_dict)
     
     print(f'Test Top1 Acc: {accuracies.avg},  Test Top3 Acc: {accuracies_top3.avg}')
     print('------------------------------------------------------------')

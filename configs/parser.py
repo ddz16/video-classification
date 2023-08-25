@@ -156,6 +156,11 @@ def load_config(args, config_path=None):
     _C.SOLVER.CLIP_GRAD_L2NORM = None  # Clip gradient at this norm before optimizer update
     _C.SOLVER.BETAS = (0.9, 0.999)  # Adam's beta
 
+    _C.FEATURES.CHECKPOINT = "checkpoints/i3d/save_xx.pth"
+    _C.FEATURES.EXTRACT = False
+    _C.FEATURES.FRAMES_PATH = "data/xxxxx/frames/"
+    _C.FEATURESSTRIDE = 1
+
     _C.OUTPUT = 'output.json'
     _C.TENSORBOARD = False
 

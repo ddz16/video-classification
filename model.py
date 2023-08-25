@@ -4,6 +4,7 @@ from torch import nn
 from models import resnet, pre_act_resnet, wide_resnet, resnext, densenet
 from models.ptv_model_builder import PTVResNet, PTVR2plus1D, PTVX3D, PTVSlowFast
 
+
 def generate_model(opt):
     """
         mode: ['score', 'feature']
@@ -131,7 +132,6 @@ def generate_model(opt):
 
 
 def generate_model_PTV(cfg):
-    
     model_dict = {
         'I3D': PTVResNet,
         'R2plus1D': PTVR2plus1D,
@@ -141,11 +141,19 @@ def generate_model_PTV(cfg):
 
     model = model_dict[cfg.MODEL.MODEL_NAME](cfg)
 
-    if cfg.MODEL.PRETRAIN:
+    if cfg.MODEL.PRETRAIN and not cfg.FEATURES.EXTRACT:
         ckpt = torch.load(cfg.MODEL.PRETRAIN_FILE)["model_state"]
         pretrained_dict = {"model."+k: v for k, v in ckpt.items() if "proj" not in k}
         missing_keys, unexpected_keys = model.load_state_dict(pretrained_dict, strict=False)
         print("missing_keys:", missing_keys)
         print("unexpected_keys:", unexpected_keys)
+
+    if cfg.FEATURES.EXTRACT:
+        ckpt = torch.load(cfg.FEATURES.CHECKPOINT)
+        model.load_state_dict(ckpt["state_dict"])
+
+        if cfg.MODEL.MODEL_NAME in ['I3D', 'X3D', 'R2plus1D']:
+            model.model.blocks[-1].dropout = nn.Identity()
+            model.model.blocks[-1].proj = nn.Identity()
 
     return model

@@ -34,18 +34,24 @@ TRAIN:
   ENABLE: True
   BATCH_SIZE: 32
   NUM_WORKERS: 8
-  CHECKPOINT_PATH: checkpoints/x3d/
+  CHECKPOINT_PATH: checkpoints/x3d_m/
 
 SOLVER:
-  BASE_LR: 0.005
+  BASE_LR: 0.001
   WARMUP: True
   WARMUP_EPOCHS: 10
   EPOCHS: 30
   SCHEDULE: cosine  # or multistep
   SCHEDULE_STEPS: [10, 20, 30]
   SCHEDULE_GAMMA: 0.1
-  WEIGHT_DECAY: 1e-3
+  WEIGHT_DECAY: 1e-5
   OPTIMIZING_METHOD: adam
+
+FEATURES:
+  CHECKPOINT: checkpoints/x3d_m/save_5.pth
+  EXTRACT: False
+  FRAMES_PATH: data/xxxxx/frames/
+  STRIDE: 1
 
 OUTPUT: output.json
 TENSORBOARD: False

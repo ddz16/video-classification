@@ -39,5 +39,11 @@ SOLVER:
   WEIGHT_DECAY: 1e-3
   OPTIMIZING_METHOD: adam
 
+FEATURES:
+  CHECKPOINT: checkpoints/r2plus1d/save_5.pth
+  EXTRACT: False
+  FRAMES_PATH: data/xxxxx/frames/
+  STRIDE: 1
+  
 OUTPUT: output.json
 TENSORBOARD: False
