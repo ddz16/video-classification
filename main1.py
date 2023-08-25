@@ -20,8 +20,8 @@ def main():
     label_dict = {'dive': 0, 'walk': 1, 'observe':2, 'work': 3, 'ascend': 4, 'off': 5, 'other': 6}
 
     spatial_transform = Compose([
-        Scale(cfg.DATA.TRAIN_CROP_SIZE),
-        CenterCrop(cfg.DATA.TRAIN_CROP_SIZE),
+        Resize((cfg.DATA.TRAIN_CROP_SIZE, cfg.DATA.TRAIN_CROP_SIZE)),
+        # CenterCrop(cfg.DATA.TRAIN_CROP_SIZE),
         ToTensor(),
         Normalize(cfg.DATA.MEAN, cfg.DATA.STD)
     ])

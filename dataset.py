@@ -217,9 +217,6 @@ class ExtractFeatureVideo(data.Dataset):
         return (len(self.frames)-self.sample_duration) // self.stride + 1
 
 
-
-
-
 if __name__ == '__main__':
     spatial_transform = []
     spatial_transform.append(Resize(224))
