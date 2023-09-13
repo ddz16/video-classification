@@ -2,6 +2,7 @@ DATA:
   NUM_FRAMES: 16                      
   SAMPLING_RATE: 2
   INPUT_CHANNEL_NUM: [3]
+  TRAIN_CROP_SIZE: 256
   MEAN: [0.395, 0.396, 0.397]
   STD: [0.250, 0.240, 0.200]
 
@@ -11,7 +12,7 @@ MODEL:
   ARCH: i3d
   MODEL_NAME: I3D
   NUM_CLASSES: 7
-  DROPOUT_RATE: 0.5
+  DROPOUT_RATE: 0.3
 
 BN:
   USE_PRECISE_STATS: True
@@ -33,14 +34,14 @@ TRAIN:
   CHECKPOINT_PATH: checkpoints/i3d/
 
 SOLVER:
-  BASE_LR: 0.01
+  BASE_LR: 0.0005
   WARMUP: False
   WARMUP_EPOCHS: 10
   EPOCHS: 30
-  SCHEDULE: cosine  # or multistep
-  SCHEDULE_STEPS: [10, 20, 30]
+  SCHEDULE: none # cosine or multistep
+  SCHEDULE_STEPS: [13, 16, 19]
   SCHEDULE_GAMMA: 0.1
-  WEIGHT_DECAY: 1e-3
+  WEIGHT_DECAY: 1e-4  # 好
   OPTIMIZING_METHOD: adam
 
 FEATURES:

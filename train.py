@@ -2,18 +2,20 @@ import torch
 import torch.nn.functional as F
 
 import os
-from utils import AverageMeter, calculate_accuracy, calculate_class_num
+from utils import AverageMeter, calculate_accuracy, calculate_class_num, save_checkpoint
 from plot_results import plot_confusion_matrix, plot_roc_curve
 
 
 def train(model, criterion, optimizer, scheduler, train_loader, test_loader, num_epochs, device, cfg, label_dict):
 
-    model.train()
+    best_test_acc = 0
+    best_epoch = 0
 
     for epoch in range(1, num_epochs+1):
 
         losses = AverageMeter()
         accuracies = AverageMeter()
+        model.train()
 
         print(f'Starting training on epoch {epoch} / {num_epochs}')
 
@@ -44,23 +46,23 @@ def train(model, criterion, optimizer, scheduler, train_loader, test_loader, num
         calculate_class_num(all_targets, label_dict, 'train')
 
         if epoch % 5 == 0:
-            if not os.path.exists(cfg.TRAIN.CHECKPOINT_PATH):
-                os.mkdir(cfg.TRAIN.CHECKPOINT_PATH)
-            save_file_path = os.path.join(cfg.TRAIN.CHECKPOINT_PATH, 'save_{}.pth'.format(epoch))
-            states = {
-                'epoch': epoch,
-                'state_dict': model.state_dict(),
-                'optimizer': optimizer.state_dict(),
-            }
-            torch.save(states, save_file_path)
-        
+            save_checkpoint(cfg.TRAIN.CHECKPOINT_PATH, epoch, model, optimizer)
+
         lr = scheduler.get_last_lr()[0]
         print('Epoch: {0}\t'
               'Lr: {1}\t'
               'Train Loss {2}\t'
               'Train Acc {3}'.format(epoch, lr, losses.avg, accuracies.avg))
-              
-        test(model, test_loader, device, label_dict)
+
+        test_acc = test(model, test_loader, device, label_dict)
+        if test_acc > best_test_acc:
+            best_test_acc = test_acc
+            best_epoch = epoch
+            print("save best checkpoint")
+            print('------------------------------------------------------------')
+            save_checkpoint(cfg.TRAIN.CHECKPOINT_PATH, epoch, model, optimizer, "best")
+    
+    print('best epoch: {}, best test acc: {}'.format(best_epoch, best_test_acc))
 
 
 def val(epoch, model, criterion, dataloader, device):
@@ -114,3 +116,4 @@ def test(model, dataloader, device, label_dict):
     
     print(f'Test Top1 Acc: {accuracies.avg},  Test Top3 Acc: {accuracies_top3.avg}')
     print('------------------------------------------------------------')
+    return accuracies.avg

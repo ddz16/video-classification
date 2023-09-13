@@ -2,6 +2,7 @@ import csv
 import random
 from functools import partialmethod
 
+import os
 import torch
 import numpy as np
 from sklearn.metrics import precision_recall_fscore_support
@@ -108,3 +109,17 @@ def partialclass(cls, *args, **kwargs):
         __init__ = partialmethod(cls.__init__, *args, **kwargs)
 
     return PartialClass
+
+
+def save_checkpoint(checkpoint_path, epoch, model, optimizer, info=None):
+    if not os.path.exists(checkpoint_path):
+        os.mkdir(checkpoint_path)
+    if not info:
+        info = epoch
+    save_file_path = os.path.join(checkpoint_path, 'save_{}.pth'.format(info))
+    states = {
+        'epoch': epoch,
+        'state_dict': model.state_dict(),
+        'optimizer': optimizer.state_dict(),
+    }
+    torch.save(states, save_file_path)

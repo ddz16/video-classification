@@ -17,5 +17,6 @@ generate_result_video/*
 deprecated/*
 data/*
 __pycache__/
+checkpoints/*
 
 

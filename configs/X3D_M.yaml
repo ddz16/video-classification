@@ -7,15 +7,15 @@ DATA:
   STD: [0.250, 0.240, 0.200]
 
 MODEL:
-  PRETRAIN: False
+  PRETRAIN: True
   PRETRAIN_FILE: pretrain/X3D_M.pyth
   ARCH: x3d
   MODEL_NAME: X3D
   NUM_CLASSES: 7
-  DROPOUT_RATE: 0.5
+  DROPOUT_RATE: 0.3  # 好
 
 BN:
-  USE_PRECISE_STATS: True
+  USE_PRECISE_STATS: True  # True更好
   NUM_BATCHES_PRECISE: 200
 
 X3D:
@@ -37,14 +37,14 @@ TRAIN:
   CHECKPOINT_PATH: checkpoints/x3d_m/
 
 SOLVER:
-  BASE_LR: 0.001
-  WARMUP: True
+  BASE_LR: 0.0005
+  WARMUP: False
   WARMUP_EPOCHS: 10
   EPOCHS: 30
-  SCHEDULE: cosine  # or multistep
-  SCHEDULE_STEPS: [10, 20, 30]
+  SCHEDULE: none # cosine or multistep
+  SCHEDULE_STEPS: [13, 16, 19]
   SCHEDULE_GAMMA: 0.1
-  WEIGHT_DECAY: 1e-5
+  WEIGHT_DECAY: 1e-4  # 好
   OPTIMIZING_METHOD: adam
 
 FEATURES:
